@@ -23,7 +23,7 @@ export class VisitorApiService implements VisitorService {
             return response.data.token
         } catch (error) {
             if (isAxiosError(error)) {
-                if (error.response && isServerError(error.response.status)) {
+                if (!error.response || isServerError(error.response.status)) {
                     if (--retryAttempt > 0) {
                         return this.getToken(retryAttempt)
                     }
@@ -46,12 +46,10 @@ export class VisitorApiService implements VisitorService {
             return response.data
         } catch (error) {
             if (isAxiosError(error)) {
-                console.log(error)
-                if (error.response && isServerError(error.response.status)) {
+                if (!error.response || isServerError(error.response.status)) {
                     if (--retryAttempt > 0) {
                         return this.getPage(token, pageNumber, retryAttempt)
                     }
-
                 }
             }
             throw error
